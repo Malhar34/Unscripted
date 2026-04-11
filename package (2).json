@@ -1,0 +1,104 @@
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+
+// Safely parse JSON from Gemini — strips markdown fences if present
+const parseJSON = (text) => {
+  const clean = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  return JSON.parse(clean);
+};
+
+// Called once at start: generates the full episode premise + assigns roles
+export const generateEpisode = async (playerNames, genre) => {
+  const prompt = `You are the showrunner for an interactive drama game called "Episodes".
+Generate a complete episode for ${playerNames.length} players with these names: ${playerNames.join(', ')}.
+
+Genre: ${genre.replace('_', ' ')}
+
+Return ONLY valid JSON with this exact structure:
+{
+  "theme": "short catchy episode title (max 6 words)",
+  "setting": "vivid one-sentence setting description",
+  "narratorIntro": "dramatic 2-3 sentence cold open narration that sets the scene and hints at the conflict. Written as a TV narrator would speak.",
+  "players": [
+    {
+      "name": "player name (must match exactly from the list)",
+      "role": "one of: hero, villain, bystander, double_agent, mastermind, detective",
+      "motivation": "one sentence secret motivation this player has"
+    }
+  ],
+  "firstChoices": [
+    "a bold action choice",
+    "a cautious diplomatic choice", 
+    "a deceptive scheming choice"
+  ]
+}
+
+Make it dramatic, specific to the genre, and give each player a distinct role. Not everyone can be the villain.`;
+
+  const result = await model.generateContent(prompt);
+  const text = result.response.text();
+  return parseJSON(text);
+};
+
+// Called after each phase: advances the story based on what players did
+export const advancePhase = async (gameState, playerActions) => {
+  const activePlayers = gameState.players.filter(p => !p.isEliminated);
+  const actionSummary = playerActions.map(a =>
+    `${a.playerName} chose: "${a.choice}"`
+  ).join('\n');
+
+  const voteSummary = Object.entries(gameState.votes || {}).map(([voterId, targetId]) => {
+    const voter = gameState.players.find(p => p.id === voterId);
+    const target = gameState.players.find(p => p.id === targetId);
+    return `${voter?.name || voterId} accused ${target?.name || targetId}`;
+  }).join('\n');
+
+  const historyText = gameState.phaseHistory.map(h =>
+    `Phase ${h.phase}: ${h.plotReveal}`
+  ).join('\n');
+
+  const prompt = `You are the narrator of "${gameState.theme}", a ${gameState.genre?.replace('_', ' ')} episode.
+
+Setting: ${gameState.setting}
+This is phase ${gameState.phase} of ${gameState.maxPhases}.
+
+Story so far:
+${historyText || 'The story is just beginning.'}
+
+What just happened:
+${actionSummary}
+
+Accusations:
+${voteSummary || 'No accusations yet.'}
+
+Active players: ${activePlayers.map(p => p.name).join(', ')}
+${gameState.phase >= gameState.maxPhases ? 'THIS IS THE FINAL PHASE. The episode must resolve.' : ''}
+
+Return ONLY valid JSON:
+{
+  "plotReveal": "2-3 sentences of dramatic narration advancing the story based on player actions. Written in present tense TV narrator style.",
+  "eliminatedPlayer": "name of the player eliminated this phase, or null if no elimination",
+  "nextChoices": [
+    "an aggressive escalating choice",
+    "a strategic alliance-building choice",
+    "a risky truth-revealing choice"
+  ],
+  "episodeResolved": ${gameState.phase >= gameState.maxPhases},
+  "resolution": ${gameState.phase >= gameState.maxPhases ? '"2-3 sentence final resolution of the episode revealing what really happened and who wins"' : 'null'},
+  "winner": ${gameState.phase >= gameState.maxPhases ? '"name of the winning player"' : 'null'}
+}`;
+
+  const result = await model.generateContent(prompt);
+  const text = result.response.text();
+  return parseJSON(text);
+};
+
+// Generates a dramatic demo episode for single-player/judge demo mode
+export const generateDemoEpisode = async () => {
+  return generateEpisode(
+    ['Alex', 'Jordan', 'Morgan', 'Riley', 'Casey'],
+    'murder_mystery'
+  );
+};

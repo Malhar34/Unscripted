@@ -1,0 +1,54 @@
+// Shared types for the entire game
+// Both server and client import from here
+
+export const GAME_STATUS = {
+  LOBBY: 'lobby',
+  GENERATING: 'generating',
+  INTRO: 'intro',
+  PHASE_ACTION: 'phase_action',
+  PHASE_VOTE: 'phase_vote',
+  RESOLVING: 'resolving',
+  RESOLVED: 'resolved',
+};
+
+export const PLAYER_ROLES = {
+  HERO: 'hero',
+  VILLAIN: 'villain',
+  BYSTANDER: 'bystander',
+  DOUBLE_AGENT: 'double_agent',
+  MASTERMIND: 'mastermind',
+  DETECTIVE: 'detective',
+};
+
+export const EPISODE_GENRES = [
+  'murder_mystery',
+  'political_scandal',
+  'heist',
+  'romance_betrayal',
+  'corporate_espionage',
+  'supernatural_thriller',
+];
+
+// The contract between server and client — never change field names without updating both sides
+export const createInitialGameState = () => ({
+  episodeId: null,
+  status: GAME_STATUS.LOBBY,
+  genre: null,
+  theme: null,
+  setting: null,
+  narratorIntro: null,
+  narratorAudioUrl: null,
+  players: [],        // { id, name, role, motivation, isEliminated, isReady }
+  phase: 0,
+  maxPhases: 3,
+  phaseHistory: [],   // { phase, plotReveal, actions, votes, eliminated }
+  currentPlotReveal: null,
+  currentAudioUrl: null,
+  votes: {},          // { voterId: targetId }
+  actions: {},        // { playerId: choiceIndex }
+  currentChoices: [], // string[] — the dialogue options for this phase
+  winner: null,
+  winnerWalletAddress: null,
+  rewardTxSignature: null,
+  createdAt: null,
+});
