@@ -9,7 +9,7 @@ This is a team project. My contribution focused on **UI/UX design, back-end, and
 ## My Role
 
 - Designed the complete game interface in **Figma** — the full visual design, screen flow, and UX for the multiplayer narrative experience.
-- Worked on integrating the Gemini API as well as ElevenLabs integration.
+- Worked on integrating the Gemini API as well as ElevenLabs integration to the back-end.
 - Contributed to the front-end and Back-end implementation of that design.
 
 Built in under 20 hours by a team of 4. Together, we built the backend (Node.js + Socket.io) and AI integrations (Gemini for story generation, ElevenLabs for voice narration).
