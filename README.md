@@ -26,7 +26,7 @@ Figma (design) · JavaScript front-end · Node.js · Socket.io · Gemini API · 
 
 ## Links
 
-- 🎥 [Devpost — demo & full write-up]((https://devpost.com/software/unscripted-your-script-your-story-you-play))
+- 🎥 [Devpost — demo & full write-up](https://devpost.com/software/unscripted-your-script-your-story-you-play)
 
 ## Status
 
