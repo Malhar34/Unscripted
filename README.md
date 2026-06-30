@@ -34,5 +34,5 @@ Built as a hackathon prototype; not currently configured to run end-to-end witho
 
 ## Author
 
-**Malhar Rathod** — Computer Engineering @ Georgia Tech · [LinkedIn](https://www.linkedin.com/in/malhar-rathod)
+**Malhar Rathod** — Computer Engineering @ Georgia Tech · [LinkedIn](https://www.linkedin.com/in/malhar-rathod-gt)
 *Forked from the original team repository.*
