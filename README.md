@@ -4,14 +4,15 @@ An AI-powered multiplayer narrative game where the story is generated live and v
 
 > 🏆 Winner — Best Use of ElevenLabs, SproutGT Hackathon (hosted by HexLabs)
 
-This is a team project. My contribution focused on **UI/UX design and front-end**.
+This is a team project. My contribution focused on **UI/UX design, back-end, and front-end**.
 
 ## My Role
 
 - Designed the complete game interface in **Figma** — the full visual design, screen flow, and UX for the multiplayer narrative experience.
-- Contributed to the front-end implementation of that design.
+- Worked on integrating the Gemini API as well as ElevenLabs integration.
+- Contributed to the front-end and Back-end implementation of that design.
 
-Built in under 20 hours by a team of [N]. The backend (Node.js + Socket.io) and AI integrations (Gemini for story generation, ElevenLabs for voice narration) were built by my teammates.
+Built in under 20 hours by a team of 4. Together, we built the backend (Node.js + Socket.io) and AI integrations (Gemini for story generation, ElevenLabs for voice narration).
 
 ## What It Does
 
@@ -25,7 +26,7 @@ Figma (design) · JavaScript front-end · Node.js · Socket.io · Gemini API · 
 
 ## Links
 
-- 🎥 [Devpost — demo & full write-up](ADD_YOUR_DEVPOST_LINK)
+- 🎥 [Devpost — demo & full write-up]([ADD_YOUR_DEVPOST_LINK](https://devpost.com/software/unscripted-your-script-your-story-you-play))
 
 ## Status
 
